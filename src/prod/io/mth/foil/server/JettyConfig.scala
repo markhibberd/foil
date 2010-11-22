@@ -1,0 +1,50 @@
+package io.mth.foil.server
+
+import javax.servlet.Servlet
+
+trait JettyConfig {
+  def fold[T](
+    war: String => String => T,
+    path: String => String => T,
+    servlet: String => String => Servlet => T,
+    compound: List[JettyConfig] => T
+  ): T
+}
+
+object JettyConfig {
+  def war(context: String, w: String) = new JettyConfig {
+    def fold[T](
+      war: String => String => T,
+      path: String => String => T,
+      servlet: String => String => Servlet => T,
+      compound: List[JettyConfig] => T
+    ) = war(context)(w)
+  }
+
+  def path(context: String, p: String) = new JettyConfig {
+    def fold[T](
+      war: String => String => T,
+      path: String => String => T,
+      servlet: String => String => Servlet => T,
+      compound: List[JettyConfig] => T
+    ) = path(context)(p)
+  }
+
+  def servlet(context: String, pattern: String, s: Servlet) = new JettyConfig {
+    def fold[T](
+      war: String => String => T,
+      path: String => String => T,
+      servlet: String => String => Servlet => T,
+      compound: List[JettyConfig] => T
+    ) = servlet(context)(pattern)(s)
+  }
+
+  def compound(configs: List[JettyConfig]) = new JettyConfig {
+    def fold[T](
+      war: String => String => T,
+      path: String => String => T,
+      servlet: String => String => Servlet => T,
+      compound: List[JettyConfig] => T
+    ) = compound(configs)
+  }
+}

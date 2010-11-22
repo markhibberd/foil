@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="scala" name="Scala">
+      <configuration>
+        <option name="compilerLibraryLevel" value="Global" />
+        <option name="compilerLibraryName" value="scala-compiler-2.8.0" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/prod" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/demo" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/gen" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="prod">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/run" />
+          <root url="jar://$MODULE_DIR$/lib/run/scala-library.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/scalaz-core_2.8.0-5.0-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/scalaz-core_2.8.0-5.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-annotations-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-ajp-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-http-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-deploy-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-continuation-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-client-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-plus-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-jndi-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-jmx-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-io-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-server-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-security-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-rewrite-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-policy-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-webapp-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-util-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-servlets-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-servlet-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/servlet-api-2.5.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-websocket-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/jetty-xml-7.1.6.v20100715.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/run/scala-compiler.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/lib/run/scalaz-core_2.8.0-5.0-sources.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/scala/latest/src/scala-library-src.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../lib/scala/latest/src/scala-compiler-src.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="test">
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/test" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib/test" recursive="false" />
+      </library>
+    </orderEntry>
+  </component>
+</module>
+

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+scala -cp lib/run/\*:gen/dist/foil.jar io.mth.foil.launch.standalone.Main "$@"
