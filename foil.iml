@@ -4,7 +4,7 @@
     <facet type="scala" name="Scala">
       <configuration>
         <option name="compilerLibraryLevel" value="Global" />
-        <option name="compilerLibraryName" value="scala-compiler-2.8.0" />
+        <option name="compilerLibraryName" value="scala-compiler-2.8.0 (1)" />
       </configuration>
     </facet>
   </component>
@@ -51,8 +51,8 @@
         <JAVADOC />
         <SOURCES>
           <root url="jar://$MODULE_DIR$/lib/run/scalaz-core_2.8.0-5.0-sources.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../lib/scala/latest/src/scala-library-src.jar!/" />
-          <root url="jar://$MODULE_DIR$/../../lib/scala/latest/src/scala-compiler-src.jar!/" />
+          <root url="jar://$USER_HOME$/lib/scala/latest/src/scala-library-src.jar!/" />
+          <root url="jar://$USER_HOME$/lib/scala/latest/src/scala-compiler-src.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
