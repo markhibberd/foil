@@ -1,0 +1,9 @@
+        import io.mth.foil._
+
+        val config = compound(List(
+            servlet("/", "/*", new DemoServlet()),  // bind DemoServlet to / context, matching all urls
+            path("/static", "resources")            // bind diretory resources to /static url.
+        ))
+
+        val foil = Foil("demp", 10080, config)      // create server
+        runfoil(foil)                               // run server

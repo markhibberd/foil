@@ -1,16 +1,1 @@
-QUARK GLUONS
-PROTON NEUTRON ELECTRON
-ATOM MOLECULE
 
-crux - lineedit
-foil.cli     - command line / dynamic config
-foil.fabric  - container independent scaffolding
-foil.launch  - laucher
-foil.server  - server
-
-
-/usr/src/lib/libedit
-
-rlwrap
-
-jline

@@ -1,5 +1,6 @@
-package io.mth.foil.server
+package io.mth.foil
 
+import scala.collection.JavaConversions._
 import javax.servlet.Servlet
 
 trait JettyConfig {
@@ -11,8 +12,11 @@ trait JettyConfig {
   ): T
 }
 
-object JettyConfig {
-  def war(context: String, w: String) = new JettyConfig {
+
+object JettyConfig extends JettyConfigs
+
+trait JettyConfigs {
+  def war(context: String, w: String): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
       path: String => String => T,
@@ -21,7 +25,7 @@ object JettyConfig {
     ) = war(context)(w)
   }
 
-  def path(context: String, p: String) = new JettyConfig {
+  def path(context: String, p: String): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
       path: String => String => T,
@@ -30,7 +34,7 @@ object JettyConfig {
     ) = path(context)(p)
   }
 
-  def servlet(context: String, pattern: String, s: Servlet) = new JettyConfig {
+  def servlet(context: String, pattern: String, s: Servlet): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
       path: String => String => T,
@@ -39,7 +43,7 @@ object JettyConfig {
     ) = servlet(context)(pattern)(s)
   }
 
-  def compound(configs: List[JettyConfig]) = new JettyConfig {
+  def compound(configs: List[JettyConfig]): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
       path: String => String => T,
@@ -47,4 +51,7 @@ object JettyConfig {
       compound: List[JettyConfig] => T
     ) = compound(configs)
   }
+
 }
+
+

@@ -1,4 +1,5 @@
 *.iws
+*~
 gen
 tmp
 out

@@ -1,5 +1,0 @@
-#!/bin/sh
-exec scala -cp `dirname $0`/lib/run/\*:gen/dist/foil.jar -savecompiled "$0" "$@"
-!#
-
-println("hello ...")

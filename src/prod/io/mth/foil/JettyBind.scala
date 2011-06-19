@@ -1,4 +1,4 @@
-package io.mth.foil.server
+package io.mth.foil
 
 import javax.servlet.Servlet
 import org.eclipse.jetty.servlet.ServletContextHandler.NO_SESSIONS

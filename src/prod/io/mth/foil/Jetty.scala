@@ -1,4 +1,4 @@
-package io.mth.foil.server
+package io.mth.foil
 
 import org.eclipse.jetty.server.handler._
 import org.eclipse.jetty.server.Server
