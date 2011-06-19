@@ -1,3 +1,0 @@
-package io.mth
-
-package object foil extends JettyConfig
