@@ -1,77 +1,130 @@
 MODULE = foil
-PROD = src/prod
-TEST = src/test
-LIB = lib/run
-CP = lib/run/\*:lib/test/\*
-CP_PROD = ${CP}:${PROD_CLS}
-CP_TEST = ${CP_PROD}:${TEST_CLS}
+VERSION = 1.0 
+
 GEN = gen
+
+SRC_PROD = src/prod
+SRC_TEST = src/test
+SRC_DEMO = src/demo
+
+CLS_PROD = gen/classes/prod
+CLS_TEST = gen/classes/test
+CLS_DEMO = gen/classes/demo
+
+CP_BASE = lib/compile/\*:lib/run/\*:lib/test/\*
+CP_PROD = ${CP_BASE}:${CLS_PROD}
+CP_TEST = ${CP_PROD}:${CLS_TEST}
+
+DOC_PROD = ${GEN}/doc/prod
+
+XRAY = lib/compile/sxr_2.8.0-0.2.7-SNAPSHOT.jar
+XRAY_PROD = ${CLS_PROD}.sxr
+XRAY_DEMO = ${CLS_DEMO}.sxr
+
 ETC = etc
-PROD_CLS = gen/prod/classes
-TEST_CLS = gen/test/classes
-DIST = gen/dist
+DIST = ${GEN}/dist
+WWW = ${ETC}/www
+
 JAR = ${DIST}/${MODULE}.jar
 JAR_SRC = ${DIST}/${MODULE}-src.jar
-PROGUARD = lib/build/proguard.jar
-MIN_JAR = ${DIST}/${MODULE}.min.jar
-TAR = ${DIST}/${MODULE}-${VERSION}.tar
-VERSION = 0.1
-MANIFEST = ${ETC}/MANIFEST.MF
+
+TAR = ${DIST}/${MODULE}-${VERSION}.tar.gz
+ZIP = ${DIST}/${MODULE}-${VERSION}.zip
+
+HASH = ${ETC}/sha1
+HASH_JAR = ${JAR}.sha1
+HASH_JAR_SRC = ${JAR_SRC}.sha1
+HASH_TAR = ${TAR}.sha1
+HASH_ZIP = ${ZIP}.sha1
+
+LICENSES = etc/licenses
+MANIFEST = etc/MANIFEST.MF
 DIST_MANIFEST = ${GEN}/MANIFEST.MF
 TAR_IMAGE = ${GEN}/image/${MODULE}-${VERSION}
+RELEASE = ${GEN}/release/${VERSION}
+PUBLISH_WWW = web@mth.io:${MODULE}.mth.io/data
+PUBLISH_RELEASE = web@mth.io:${MODULE}.mth.io/data/release/.
 
-.PHONY: clean
+
+DIRECTORIES = ${GEN} ${GEN}/tmp ${CLS_DEMO} ${CLS_PROD} ${CLS_TEST} ${DIST} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${DOC_PROD} ${RELEASE} ${TAR_IMAGE}/doc/xray ${DEMO_TARGET}
+
+
+.PHONY: clean dist doc compile size repl 
 
 default: test dist
 
-compile: clean ${PROD_CLS} ${TEST_CLS}
-	find ${PROD} -name "*.scala" | xargs -s 30000 fsc -classpath ${CP} -d ${PROD_CLS} && \
-	find ${TEST} -name "*.scala" | xargs -s 30000 fsc -classpath ${CP_PROD} -d ${TEST_CLS} 
+compile: clean ${CLS_PROD} ${CLS_TEST} ${CLS_DEMO}
+	find ${SRC_PROD} -name "*.scala" -o -name "*.java" | xargs -s 30000 scalac -Xplugin:${XRAY} -P:sxr:base-directory:${SRC_PROD}  -classpath ${CP_BASE} -d ${CLS_PROD}
+	find ${SRC_PROD} -name "*.java" | xargs -s 30000 javac -source 1.5 -target 1.5 -classpath ${CP_PROD} -d ${CLS_PROD}
+	find ${SRC_DEMO} -name "*.scala" -o -name "*.java" | xargs -s 30000 scalac -Xplugin:${XRAY} -P:sxr:base-directory:${SRC_DEMO}  -classpath ${CP_PROD} -d ${CLS_DEMO}
+	find ${SRC_DEMO} -name "*.java" | xargs -s 30000 javac -source 1.5 -target 1.5 -classpath ${CP_PROD} -d ${CLS_DEMO}
+	find ${SRC_TEST} -name "*.scala" | xargs -s 30000 scalac -classpath ${CP_PROD} -d ${CLS_TEST} 
 
 test: compile
-	scala -cp ${CP_TEST} org.scalatest.tools.Runner -p ${TEST_CLS} -oDFW 
+	scala -cp ${CP_TEST} org.scalatest.tools.Runner -p ${CLS_TEST} -oDFW 
 
 ${JAR}: compile ${DIST_MANIFEST} ${DIST}
-	jar cfm ${JAR} ${DIST_MANIFEST} -C ${PROD_CLS} .
+	jar cfm ${JAR} ${DIST_MANIFEST} -C ${CLS_PROD} .
 
 ${JAR_SRC}: ${DIST}
-	jar cf ${JAR_SRC} -C ${PROD} .
+	jar cf ${JAR_SRC} -C ${SRC_PROD} .
 
-${TAR}: ${JAR} ${JAR_SRC} ${TAR_IMAGE} ${TAR_IMAGE}/lib
+${TAR}: doc ${JAR} ${JAR_SRC} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${TAR_IMAGE}/doc/xray ${DEMO_TARGET}
+	cp -r ${DOC_PROD} ${TAR_IMAGE}/doc/api && \
+	cp -r ${SRC_DEMO} ${TAR_IMAGE}/. && \
+	cp -r ${XRAY_PROD} ${TAR_IMAGE}/doc/xray/prod && \
+	cp -r ${XRAY_DEMO} ${TAR_IMAGE}/doc/xray/demo && \
 	cp lib/run/*.jar ${TAR_IMAGE}/lib && \
 	cp ${JAR} ${JAR_SRC} ${TAR_IMAGE} && \
-	cp LICENSE COPYING README ${TAR_IMAGE} && \
-	cp -r ${ETC}/licenses ${TAR_IMAGE} && \
-	tar cfz ${TAR} -C ${GEN}/image .
+	cp README LICENSE ${TAR_IMAGE} && \
+	cp -r ${LICENSES} ${TAR_IMAGE} && \
+	tar cfz ${TAR} -C ${GEN}/image . && \
+	(cd ${GEN}/image && zip -q ../../${ZIP} -r .)
 
 dist: clean ${TAR}
 
-publish:
-	rsync -aH --stats --exclude \*~ ${ETC}/www/ web@mth.io:foil.mth.io/data
+www:
+	rsync -aH --stats --exclude \*~ ${WWW}/ ${PUBLISH_WWW}
 
-depend:
-	cp ../pirate/gen/dist/pirate.jar lib/run/. && \
-	cp ../pirate/LICENSE etc/licenses/pirate/.
+release: dist ${RELEASE} ${HASH_TAR} ${HASH_JAR} ${HASH_ZIP} ${HASH_JAR_SRC}
+	cp -r ${TAR_IMAGE}/doc ${RELEASE}
+	cp ${TAR} ${HASH_TAR} ${JAR} ${HASH_JAR} ${ZIP} ${HASH_ZIP} ${JAR_SRC} ${HASH_JAR_SRC} ${RELEASE}
 
+publish: release
+	rsync -aH --stats --exclude \*~ ${RELEASE} ${PUBLISH_RELEASE}
 
-${MIN_JAR}: ${JAR}
-	java -jar ${PROGUARD} -injars lib/run/scala-library.jar:lib/run/scalaz-core_2.8.0-5.0.jar:${JAR} \
-                              -outjar ${MIN_JAR} @etc/proguard.conf
+doc: compile ${DOC_PROD}
+	(cd ${SRC_PROD} && \
+	find io -name "*.scala" | xargs -s 30000 \
+		scaladoc \
+			-doc-title "scaladoc for [${MODULE} ${VERSION}]" \
+			-doc-version ${VERSION} \
+			-classpath ../../lib/run/\*:../../${CLS_PROD} \
+			-d ../../${DOC_PROD})
+
+${HASH_ZIP}: ${ZIP}
+	${HASH} ${ZIP} > ${HASH_ZIP}
+
+${HASH_JAR_SRC}: ${JAR_SRC}
+	${HASH} ${JAR_SRC} > ${HASH_JAR_SRC}
+
+${HASH_JAR}: ${JAR}
+	${HASH} ${JAR} > ${HASH_JAR}
+
+${HASH_TAR}: ${TAR}
+	${HASH} ${TAR} > ${HASH_TAR}
 
 ${DIST_MANIFEST}: ${GEN}
 	sed -e 's/VERSION/${VERSION}/' ${MANIFEST} > ${DIST_MANIFEST}
 
 repl: compile
-	scala -classpath ${CP}:${PROD_CLS}:${TEST_CLS}
+	scala -classpath ${CP_BASE}:${CLS_PROD}:${CLS_TEST}
 
 size: 
-	find ${PROD} -name "*.scala" | xargs wc | sort -n
+	find ${SRC_PROD} -name "*.scala" | xargs wc | sort -n
 
-simian:
-	echo "implement me"
-
-${GEN} ${GEN}/tmp ${PROD_CLS} ${TEST_CLS} ${DIST} ${LIB} ${TAR_IMAGE} ${TAR_IMAGE}/lib:
+${DIRECTORIES}:
 	mkdir -p $@
 
 clean:
-	rm -rf ${GEN}; find . -name "*~" -o -name "*.core" -print0 | xargs -0 rm
+	rm -rf ${GEN}; find . -name "*~" -o -name "*.core" -print0 | xargs -0 rm -f
