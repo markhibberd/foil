@@ -42,7 +42,7 @@ PUBLISH_WWW = web@mth.io:${MODULE}.mth.io/data
 PUBLISH_RELEASE = web@mth.io:${MODULE}.mth.io/data/release/.
 
 
-DIRECTORIES = ${GEN} ${GEN}/tmp ${CLS_DEMO} ${CLS_PROD} ${CLS_TEST} ${DIST} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${DOC_PROD} ${RELEASE} ${TAR_IMAGE}/doc/xray ${DEMO_TARGET}
+DIRECTORIES = ${GEN} ${GEN}/tmp ${CLS_DEMO} ${CLS_PROD} ${CLS_TEST} ${DIST} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${DOC_PROD} ${RELEASE} ${TAR_IMAGE}/doc ${DEMO_TARGET}
 
 
 .PHONY: clean dist doc compile size repl 
@@ -65,7 +65,7 @@ ${JAR}: compile ${DIST_MANIFEST} ${DIST}
 ${JAR_SRC}: ${DIST}
 	jar cf ${JAR_SRC} -C ${SRC_PROD} .
 
-${TAR}: doc ${JAR} ${JAR_SRC} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${TAR_IMAGE}/doc/xray ${DEMO_TARGET}
+${TAR}: doc ${JAR} ${JAR_SRC} ${TAR_IMAGE} ${TAR_IMAGE}/lib ${TAR_IMAGE}/doc ${DEMO_TARGET}
 	cp -r ${DOC_PROD} ${TAR_IMAGE}/doc/api && \
 	cp -r ${SRC_DEMO} ${TAR_IMAGE}/. && \
 	cp lib/run/*.jar ${TAR_IMAGE}/lib && \
