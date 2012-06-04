@@ -39,7 +39,6 @@ object build extends Build {
     , publishSetting
     , libraryDependencies ++= Seq(
         "org.specs2" % "specs2_2.9.2" % "1.9" % "test" withSources
-      ,  "org.specs2" % "specs2_2.9.2" % "1.9" % "test" withSources
       , "org.scalacheck" %% "scalacheck" % "1.9" % "test" withSources
       )
     )
