@@ -1,0 +1,79 @@
+NAME
+        foil - http wrapper and shell
+
+DESCRIPTION
+        Foil is a wrapper around http endpoints (currently supporting
+        jetty) providing quick config and launch, as well as an 
+        interactive console.
+
+USAGE 
+        Scala
+
+        The scala api consists of a number of data types to build
+        up a configuration, then a server, and then the server
+        can be started.
+
+        The important types are:
+
+          JettyConfig  -- Only supported config for version 1.0
+          Foil         -- The foil server configuration
+          FoilRunner   -- Foil run operation
+
+        For example:
+        
+        import io.mth.foil._
+
+        val config = compound(List(
+          servlet("/", "/*", new DemoServlet()),  // bind DemoServlet to / context, matching all urls
+          path("/static", "static")               // bind diretory resources to /static url.
+        ))
+
+        val foil = Foil("demp", 10080, config)    // create server
+        runfoil(foil)                             // run server
+        
+
+
+        Java
+
+        There is a thin java veneer around the scala api. The api
+        consists of `Configs` to build up the server configuration
+        and `Foils` to construct and start the server.
+
+        For example (matching the scala example):
+
+        import io.mth.foil.j.*;
+
+        public class DemoServer {
+            private static final Foils f = new DefaultFoils();
+            private static final Configs c = new DefaultConfigs();
+
+            public static void main(String[] args) {
+                Config config = c.compound(
+                       c.servlet("/", "/*", new DemoServlet()),  // bind DemoServlet to / context, matching all urls
+                       c.path("/static", "resources")            // bind diretory resources to /static url.
+                );
+                Foil foil = f.nu("demo", 10080, config);         // create server
+                foil.run();                                      // run server
+            }
+        }
+
+
+STATE
+        The `foil` library is currently has a stable api for creating
+        a runnable server.
+
+        The `foil` command line api is under development and will not
+        be stable until a 2.0 release.
+
+AUTHOR
+        Mark Hibberd <mark@hibberd.id.au>
+        Nick Hibberd <nhibberd@gmail.com>
+
+NOTES
+        1. official repository
+           https://github.com/markhibberd/foil
+        2. site and documentation
+           http://foil.mth.io
+        3. license (3 point BSD style)
+           https://github.com/markhibberd/foil/blob/master/LICENSE
+
