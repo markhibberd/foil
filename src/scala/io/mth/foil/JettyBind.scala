@@ -39,13 +39,13 @@ object JettyBind {
     }
 
     // FIX Is this really what we want, not sure how much value the default handler adds...
-    def bindpath(context: String, path: String) = {
+    def bindpath(context: String, path: String, cache: Boolean) = {
       (server: Server) =>
         val resource = new ResourceHandler()
         resource.setDirectoriesListed(true)
         resource.setWelcomeFiles(Array("index.html"))
         resource.setResourceBase(path)
-
+        if (!cache) resource.setCacheControl("no-cache")
         val default = new DefaultHandler()
         val handlers = new HandlerList()
         handlers.setHandlers(Array(resource, default))
@@ -74,7 +74,7 @@ object JettyBind {
 
     config.fold(
       c => w => bindwar(c, w),
-      c => p => bindpath(c, p),
+      c => p => cache => bindpath(c, p, cache),
       c => p => s => bindservlet(c, p, s),
       cs => bindcompound(cs)
       )

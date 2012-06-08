@@ -6,7 +6,7 @@ import javax.servlet.Servlet
 trait JettyConfig {
   def fold[T](
     war: String => String => T,
-    path: String => String => T,
+    path: String => String => Boolean => T,
     servlet: String => String => Servlet => T,
     compound: List[JettyConfig] => T
   ): T
@@ -19,25 +19,25 @@ trait JettyConfigs {
   def war(context: String, w: String): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
-      path: String => String => T,
+      path: String => String => Boolean => T,
       servlet: String => String => Servlet => T,
       compound: List[JettyConfig] => T
     ) = war(context)(w)
   }
 
-  def path(context: String, p: String): JettyConfig = new JettyConfig {
+  def path(context: String, p: String, cache: Boolean = true): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
-      path: String => String => T,
+      path: String => String => Boolean => T,
       servlet: String => String => Servlet => T,
       compound: List[JettyConfig] => T
-    ) = path(context)(p)
+    ) = path(context)(p)(cache)
   }
 
   def servlet(context: String, pattern: String, s: Servlet): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
-      path: String => String => T,
+      path: String => String => Boolean => T,
       servlet: String => String => Servlet => T,
       compound: List[JettyConfig] => T
     ) = servlet(context)(pattern)(s)
@@ -46,7 +46,7 @@ trait JettyConfigs {
   def compound(configs: List[JettyConfig]): JettyConfig = new JettyConfig {
     def fold[T](
       war: String => String => T,
-      path: String => String => T,
+      path: String => String => Boolean => T,
       servlet: String => String => Servlet => T,
       compound: List[JettyConfig] => T
     ) = compound(configs)
