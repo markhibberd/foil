@@ -15,9 +15,8 @@ object Jetty {
     binder(server)
     server.addLifeCycleListener(new LifeCycle.Listener() {
       def lifeCycleFailure(e: LifeCycle, c: Throwable) = {
-        System.err.println("Server stopped unexpectedly: "
+        System.err.println("Server stopped unexpectedly: " +
            c.getClass.getSimpleName + "[" + c.getMessage + "]" )
-        c.printStackTrace
         sys.exit(1)
       }
       def lifeCycleStarted(e: LifeCycle) = {}
