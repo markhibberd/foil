@@ -26,7 +26,7 @@ object build extends Build {
       name := "foil"
     , organization := "io.mth"
     , version := "1.3-SNAPSHOT"
-    , scalaVersion := "2.9.2"
+    , scalaVersion := "2.10.4"
     , scalacOptions := Seq(
         "-deprecation"
       , "-unchecked"
@@ -38,8 +38,8 @@ object build extends Build {
     , testOptions in Test += Tests.Setup(() => System.setProperty("specs2.outDir", "gen/sbt/target/specs2-reports"))
     , publishSetting
     , libraryDependencies ++= Seq(
-        ("org.specs2" %% "specs2" % "1.12.2" % "test").cross(CrossVersion.full)
-      , ("org.scalacheck" %% "scalacheck" % "1.10.0" % "test").cross(CrossVersion.full)
+        ("org.specs2" %% "specs2-core" % "2.4.16" % "test")
+      , ("org.scalacheck" %% "scalacheck" % "1.12.2" % "test")
       )
     )
   )
